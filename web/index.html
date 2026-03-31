@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillForge — Describe your skill. Ship it in seconds.</title>
+  <meta name="description" content="AI-powered CLI that generates complete, publish-ready OpenClaw agent skills from natural language descriptions.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#6366f1"/>
+          <path d="M8 12L16 8L24 12V20L16 24L8 20V12Z" stroke="white" stroke-width="2" fill="none"/>
+          <circle cx="16" cy="16" r="3" fill="white"/>
+        </svg>
+        <span>SkillForge</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#install" class="nav-cta">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Now in Public Beta
+      </div>
+      <h1 class="hero-title">Describe your skill.<br>Ship it in seconds.</h1>
+      <p class="hero-subtitle">
+        SkillForge is an AI-powered CLI that generates complete, publish-ready OpenClaw agent skills from natural language descriptions. No more manual spec reading — just describe what you want and go.
+      </p>
+      <div class="hero-actions">
+        <a href="#install" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L10 18M10 18L4 12M10 18L16 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Install CLI
+        </a>
+        <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+      </div>
+      
+      <!-- CLI Demo -->
+      <div class="cli-demo">
+        <div class="cli-header">
+          <div class="cli-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="cli-title">terminal</span>
+        </div>
+        <div class="cli-body">
+          <div class="cli-line">
+            <span class="cli-prompt">$</span>
+            <span class="cli-command" id="typewriter"></span>
+            <span class="cli-cursor"></span>
+          </div>
+          <div class="cli-output" id="cli-output" style="display: none;">
+            <div class="cli-success">✅ Skill generated successfully!</div>
+            <div class="cli-path">📁 Location: ./hacker-news-monitor</div>
+            <div class="cli-files">
+              <div class="cli-file">├── SKILL.md</div>
+              <div class="cli-file">└── skill.json</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Section -->
+  <section class="problem">
+    <div class="container">
+      <div class="problem-content">
+        <h2>The old way is painful.</h2>
+        <p>
+          Creating OpenClaw skills manually means reading dense specs, creating directories, writing SKILL.md by hand, validating against the schema, and then figuring out how to publish. It's a 20-minute task that should take 20 seconds.
+        </p>
+        <div class="problem-badges">
+          <span class="badge">📋 Read the spec</span>
+          <span class="badge">📁 Create directories</span>
+          <span class="badge">✍️ Write SKILL.md</span>
+          <span class="badge">✅ Validate</span>
+          <span class="badge">🚀 Publish</span>
+        </div>
+        <p class="problem-solution">
+          <strong>We automated all of it.</strong> Just describe what you want and SkillForge handles the rest.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Three steps from idea to working skill</p>
+      
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Describe</h3>
+            <p>Type a natural language description of what your skill should do. "Monitor Hacker News for AI tool launches and email me daily summaries."</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Generate</h3>
+            <p>SkillForge's AI analyzes your description, classifies the skill type, and generates a complete SKILL.md following the OpenClaw spec.</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Ship</h3>
+            <p>Your skill is ready. Copy it to your OpenClaw skills directory and start using it immediately.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2 class="section-title">Features</h2>
+      <p class="section-subtitle">Everything you need to build skills fast</p>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI-Powered Generation</h3>
+          <p>Uses advanced language models to understand your intent and generate comprehensive skill definitions that follow the OpenClaw spec exactly.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Spec-Compliant Output</h3>
+          <p>Every generated skill includes properly formatted SKILL.md and skill.json with all required fields, triggers, and tool references.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>One-Click Publish</h3>
+          <p>Pro users can publish directly to ClawHub. Your skills are immediately available across all your OpenClaw agents.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📜</div>
+          <h3>Script Scaffolding</h3>
+          <p>Pro tier includes working implementation boilerplate in TypeScript, JavaScript, or Python — start coding immediately.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>API References</h3>
+          <p>Pro tier auto-generates reference documentation for the services your skill integrates with.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <h3>Built-in Validation</h3>
+          <p>Every skill is validated before output. You'll know immediately if something's missing or malformed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <h2 class="section-title">Simple Pricing</h2>
+      <p class="section-subtitle">Start free, upgrade when you need more</p>
+      
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">$0<span>/mo</span></div>
+          <ul class="pricing-features">
+            <li>✅ AI skill generation</li>
+            <li>✅ SKILL.md + skill.json</li>
+            <li>✅ Basic validation</li>
+            <li>✅ Unlimited skills</li>
+            <li class="disabled">❌ Script scaffolding</li>
+            <li class="disabled">❌ API references</li>
+            <li class="disabled">❌ One-click publish</li>
+          </ul>
+          <a href="#install" class="btn btn-outline">Get Started</a>
+        </div>
+        
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-tier">Pro</div>
+          <div class="pricing-price">$9<span>/mo</span></div>
+          <ul class="pricing-features">
+            <li>✅ AI skill generation</li>
+            <li>✅ SKILL.md + skill.json</li>
+            <li>✅ Basic validation</li>
+            <li>✅ Unlimited skills</li>
+            <li>✅ Script scaffolding</li>
+            <li>✅ API references</li>
+            <li>✅ One-click publish</li>
+          </ul>
+          <a href="#install" class="btn btn-primary">Start Pro Trial</a>
+        </div>
+        
+        <div class="pricing-card">
+          <div class="pricing-tier">Team</div>
+          <div class="pricing-price">$29<span>/mo</span></div>
+          <ul class="pricing-features">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Team skill templates</li>
+            <li>✅ Shared skill library</li>
+            <li>✅ Usage analytics</li>
+            <li>✅ Priority support</li>
+            <li>✅ Custom branding</li>
+            <li>✅ SSO integration</li>
+          </ul>
+          <a href="#install" class="btn btn-outline">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install Section -->
+  <section class="install" id="install">
+    <div class="container">
+      <h2 class="section-title">Get Started</h2>
+      <p class="section-subtitle">Install SkillForge in seconds</p>
+      
+      <div class="install-code">
+        <div class="code-block">
+          <div class="code-label">bash</div>
+          <pre><code>npm install -g @shadoprizm/skillforge</code></pre>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      
+      <div class="install-usage">
+        <h3>Basic Usage</h3>
+        <div class="code-block">
+          <div class="code-label">bash</div>
+          <pre><code>skillforge "Monitor Hacker News for AI tool launches and email me daily summaries"</code></pre>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        
+        <h3>With Options</h3>
+        <div class="code-block">
+          <div class="code-label">bash</div>
+          <pre><code># Specify language and output
+skillforge "Scan websites for security vulnerabilities" --output ./sec-skill --lang python
+
+# Pro features
+skillforge "Build a daily weather briefing" --pro --api-key sk_live_xxx</code></pre>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="32" height="32" rx="8" fill="#6366f1"/>
+              <path d="M8 12L16 8L24 12V20L16 24L8 20V12Z" stroke="white" stroke-width="2" fill="none"/>
+              <circle cx="16" cy="16" r="3" fill="white"/>
+            </svg>
+            <span>SkillForge</span>
+          </a>
+          <p>AI-powered skill generation for OpenClaw agents.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#install">Documentation</a>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <a href="#">North Star Holdings</a>
+            <a href="#">Astra Web Dev</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 North Star Holdings · Built with Astra Web Dev</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
