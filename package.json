@@ -1,6 +1,6 @@
 {
   "name": "@shadoprizm/skillforge",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "AI-powered CLI that generates complete, publish-ready OpenClaw agent skills from natural language descriptions",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "node --test tests/auditor.test.js",
     "prepublishOnly": "npm run build",
     "dev": "tsc --watch"
   },

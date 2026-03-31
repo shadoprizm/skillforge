@@ -23,12 +23,41 @@ skillforge "Build a GitHub PR reviewer notifier" --output ./gh-pr-skill
 skillforge "Scan websites for security issues" --output ./sec-skill --lang python
 
 # Pro features (requires API key)
-skillforge "Build a daily weather briefing" --pro --api-key sk_live_xxx
+skillforge "Build a daily weather briefing" --pro --api-key FAKE_EXAMPLE_KEY
 ```
+
+## Audit Existing Skills
+
+Evaluate any OpenClaw skill for quality, structure, completeness, and safety:
+
+```bash
+# Audit a local skill directory (default table output)
+skillforge audit ./my-skill
+
+# JSON output for CI/CD pipelines
+skillforge audit ./my-skill --format json
+
+# Markdown report for documentation
+skillforge audit ./my-skill --format markdown
+
+# Pro: AI-powered deep analysis
+skillforge audit ./my-skill --pro --api-key sk_pro_xxx
+```
+
+The audit checks 5 categories and produces a scored report with a letter grade:
+
+| Category | Weight | What It Checks |
+|----------|--------|----------------|
+| **Structure** | 20% | SKILL.md, skill.json, file organization |
+| **Completeness** | 25% | Required sections, metadata fields |
+| **Quality** | 25% | Description clarity, workflow detail, examples |
+| **Safety** | 20% | Dangerous patterns, hardcoded secrets |
+| **Compatibility** | 10% | Category validity, tool references, semver |
 
 ## Features
 
 - **AI-Powered Generation** — Uses advanced language models to understand your intent
+- **Skill Auditing** — Evaluate existing skills for quality, structure, completeness, and safety
 - **Spec-Compliant Output** — Every skill follows the OpenClaw AgentSkills specification exactly
 - **No API Key Required** — Generate complete skill scaffolds instantly, no account needed
 - **Pro Tier ($9/mo)** — Script scaffolding, API references, one-click publish
@@ -104,7 +133,7 @@ my-skill/
 
 ```bash
 # Set your API key for Pro features
-skillforge config:set-api-key sk_live_xxx
+skillforge config:set-api-key FAKE_EXAMPLE_KEY
 
 # Set default language
 skillforge config:set-language python

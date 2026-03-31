@@ -6,6 +6,7 @@
 import { Command } from 'commander';
 import { execSync } from 'child_process';
 import { SkillGenerator } from './generator/index.js';
+import { SkillAuditor, formatReport, type OutputFormat } from './auditor/index.js';
 import AuthManager from './auth/index.js';
 
 const program = new Command();
@@ -13,7 +14,7 @@ const program = new Command();
 program
   .name('skillforge')
   .description('AI-powered CLI that generates complete, publish-ready OpenClaw agent skills from natural language descriptions')
-  .version('0.1.0');
+  .version('0.3.0');
 
 program
   .argument('<description>', 'Natural language description of the skill to generate')
@@ -56,7 +57,13 @@ program
     });
 
     if (!result.success) {
-      console.error(`\n❌ Generation failed: ${result.error}`);
+      console.error(`\n❌ Generation failed: ${result.error || 'validation errors'}`);
+      if (result.validation.errors.length > 0) {
+        console.error(`\n   Validation errors:`);
+        for (const error of result.validation.errors) {
+          console.error(`      • ${error}`);
+        }
+      }
       process.exit(1);
     }
 
@@ -156,6 +163,48 @@ program
     } catch {
       console.error('❌ ClawHub login failed or ClawHub CLI is not installed.');
       console.error('   Install: npm install -g clawhub');
+      process.exit(1);
+    }
+  });
+
+// Audit command
+program
+  .command('audit <skill-path>')
+  .description('Audit an existing skill for quality, structure, completeness, and safety')
+  .option('-f, --format <format>', 'Output format: table, json, markdown', 'table' as OutputFormat)
+  .option('--pro', 'Enable Pro AI-powered deep analysis', false)
+  .option('--api-key <key>', 'API key for Pro features')
+  .action(async (skillPath: string, options: {
+    format?: string;
+    pro?: boolean;
+    apiKey?: string;
+  }) => {
+    const fmt = (options.format || 'table') as OutputFormat;
+    if (!['table', 'json', 'markdown'].includes(fmt)) {
+      console.error(`❌ Invalid format: ${fmt}. Use table, json, or markdown.`);
+      process.exit(1);
+    }
+
+    const auditor = new SkillAuditor();
+
+    // Pro check
+    let isPro = false;
+    if (options.pro) {
+      const authManager = new AuthManager();
+      const key = options.apiKey || authManager.getApiKey();
+      if (!key || !authManager.isProKey(key)) {
+        console.error('❌ Pro features require a valid API key');
+        console.error('   Use --api-key <key> or run `skillforge config:set-api-key <key>`');
+        process.exit(1);
+      }
+      isPro = true;
+    }
+
+    try {
+      const report = auditor.audit(skillPath, isPro);
+      console.log(formatReport(report, fmt));
+    } catch (err) {
+      console.error(`\n❌ Audit failed: ${err instanceof Error ? err.message : String(err)}\n`);
       process.exit(1);
     }
   });

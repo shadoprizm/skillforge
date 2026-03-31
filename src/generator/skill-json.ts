@@ -63,16 +63,16 @@ export async function generateSkillJson(options: SkillJsonOptions): Promise<Skil
  */
 function getCategoryFromType(type: SkillClassification['type']): string {
   const categories: Record<string, string> = {
-    monitoring: 'DevOps',
-    automation: 'Productivity',
-    research: 'Intelligence',
-    browser: 'Automation',
-    data: 'Data',
-    communication: 'Communication',
-    developer: 'Developer',
-    utility: 'Tools',
+    monitoring: 'monitoring',
+    automation: 'automation',
+    research: 'research',
+    browser: 'browser',
+    data: 'data',
+    communication: 'communication',
+    developer: 'developer',
+    utility: 'utility',
   };
-  return categories[type] || 'General';
+  return categories[type] || 'utility';
 }
 
 /**
