@@ -105,7 +105,7 @@ describe('Safety checks', () => {
     const dir = makeSkillDir('secrets', {
       'SKILL.md': '# Secret Skill\n',
       'skill.json': JSON.stringify({ name: 'secrets', version: '1.0.0', author: 't', description: 'd', tags: ['t'], category: 'utility' }),
-      'scripts/config.ts': 'const API_KEY = "FAKE_TEST_KEY";',
+      'scripts/config.ts': 'const API_KEY = "sk_test_FAKE_KEY_FOR_TESTING_ONLY";',
     });
     const auditor = new SkillAuditor();
     const report = auditor.audit(dir);
