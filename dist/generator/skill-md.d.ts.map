@@ -1,1 +1,0 @@
-{"version":3,"file":"skill-md.d.ts","sourceRoot":"","sources":["../../src/generator/skill-md.ts"],"names":[],"mappings":"AAAA;;;GAGG;AAEH,OAAO,QAAQ,MAAM,iBAAiB,CAAC;AAGvC,MAAM,WAAW,cAAc;IAC7B,WAAW,EAAE,MAAM,CAAC;IACpB,SAAS,EAAE,MAAM,CAAC;IAClB,QAAQ,EAAE,QAAQ,CAAC;CACpB;AAED;;GAEG;AACH,wBAAsB,eAAe,CAAC,OAAO,EAAE,cAAc,GAAG,OAAO,CAAC,MAAM,CAAC,CAc9E;AAED,eAAe,eAAe,CAAC"}
