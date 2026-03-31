@@ -1,6 +1,6 @@
 {
   "name": "@shadoprizm/skillforge",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "AI-powered CLI that generates complete, publish-ready OpenClaw agent skills from natural language descriptions",
   "type": "module",
   "main": "./dist/index.js",

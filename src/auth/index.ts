@@ -13,11 +13,14 @@ export interface SkillForgeConfig {
   defaultOutput?: string;
 }
 
-const VALID_PRO_KEYS = [
-  'sk_pro_skillforge_001',
-  'sk_pro_skillforge_002',
-  'sk_pro_skillforge_dev',
-];
+/**
+ * Accept any non-empty API key — the AI provider validates it.
+ * Supports: Z.AI (alphanumeric), OpenAI (sk-...), OpenRouter (sk-or-...), Qwen
+ */
+function isValidApiKey(key: string): boolean {
+  if (!key || key.trim().length < 10) return false;
+  return true;
+}
 
 export class AuthManager {
   private config: Conf<SkillForgeConfig>;
@@ -38,7 +41,7 @@ export class AuthManager {
    * Check if a provided API key is valid for Pro features
    */
   isProKey(key: string): boolean {
-    return VALID_PRO_KEYS.includes(key);
+    return isValidApiKey(key);
   }
 
   /**

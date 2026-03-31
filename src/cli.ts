@@ -35,14 +35,19 @@ program
 
     const authManager = new AuthManager();
     
-    // Check API key for Pro features only (--publish is free tier)
-    if (options.pro) {
-      const key = options.apiKey || authManager.getApiKey();
-      if (!key || !authManager.isProKey(key)) {
-        console.error('❌ Pro features require a valid API key');
-        console.error('   Use --api-key <key> or run `skillforge config --set-api-key <key>`');
-        process.exit(1);
-      }
+    // Check API key for Pro features (--publish is free tier)
+    const resolvedKey = options.apiKey
+      || authManager.getApiKey()
+      || process.env.ZAI_API_KEY
+      || process.env.OPENAI_API_KEY
+      || process.env.OPENROUTER_API_KEY
+      || process.env.QWEN_API_KEY;
+
+    if (options.pro && !resolvedKey) {
+      console.error('❌ Pro features require a valid API key');
+      console.error('   Use --api-key <key> or run `skillforge config:set-api-key <key>`');
+      console.error('   Or set ZAI_API_KEY / OPENAI_API_KEY / OPENROUTER_API_KEY env var');
+      process.exit(1);
     }
 
     // Generate the skill
@@ -51,8 +56,8 @@ program
       description,
       output: options.output,
       language: options.lang,
-      apiKey: options.apiKey,
-      isPro: options.pro,
+      apiKey: resolvedKey,
+      isPro: options.pro || !!resolvedKey,
       publish: options.publish,
     });
 
