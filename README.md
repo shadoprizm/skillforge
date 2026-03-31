@@ -30,8 +30,45 @@ skillforge "Build a daily weather briefing" --pro --api-key sk_live_xxx
 
 - **AI-Powered Generation** — Uses advanced language models to understand your intent
 - **Spec-Compliant Output** — Every skill follows the OpenClaw AgentSkills specification exactly
-- **Free Tier** — Generate SKILL.md and skill.json at no cost
+- **No API Key Required** — Generate complete skill scaffolds instantly, no account needed
 - **Pro Tier ($9/mo)** — Script scaffolding, API references, one-click publish
+- **Multi-Provider Support** — Works with ZAI, OpenAI, OpenRouter, and Qwen
+
+## No API Key Required
+
+SkillForge works **out of the box** with zero configuration. When no API key is detected, it uses template-based generation to create a complete, well-structured skill scaffold from your description.
+
+The template mode generates:
+- Proper OpenClaw SKILL.md with triggers, workflow, and tools sections
+- Valid skill.json with correct metadata and tags
+- Well-organized structure following the AgentSkills specification
+
+This means you can start building skills immediately — no sign-ups, no API keys, no costs.
+
+## Configure AI (Optional)
+
+For AI-powered generation with enhanced quality and Pro features, set one environment variable before running SkillForge:
+
+```bash
+# Option 1: ZAI (Recommended - Free via OpenClaw)
+export ZAI_API_KEY=your_zai_api_key
+
+# Option 2: OpenAI
+export OPENAI_API_KEY=sk-xxxx
+
+# Option 3: OpenRouter
+export OPENROUTER_API_KEY=sk-or-xxxx
+
+# Option 4: Qwen/Alibaba
+export QWEN_API_KEY=your_qwen_api_key
+```
+
+Priority order: ZAI → OpenAI → OpenRouter → Qwen
+
+When an API key is detected, SkillForge automatically:
+- Uses the appropriate provider and model
+- Enables Pro tier features (scripts, references, README)
+- Generates higher-quality, AI-optimized skill definitions
 
 ## How It Works
 
@@ -88,8 +125,8 @@ skillforge config
 
 | Tier | Price | Features |
 |------|-------|----------|
-| Free | $0/mo | SKILL.md + skill.json generation |
-| Pro | $9/mo | Scripts, API references, publish |
+| Free | $0/mo | SKILL.md + skill.json (template mode, no API key needed) |
+| Pro | $9/mo | Scripts, API references, publish (requires API key) |
 | Team | $29/mo | Templates, sharing, analytics |
 
 ## Documentation

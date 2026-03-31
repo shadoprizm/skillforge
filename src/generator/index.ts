@@ -1,16 +1,17 @@
 /**
  * Main Generator Orchestrator
  * Coordinates the entire skill generation pipeline
+ * Supports both AI-powered and template-based generation
  */
 
-import { mkdirSync, writeFileSync, existsSync } from 'fs';
+import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { execSync } from 'child_process';
 import AIClient from '../ai/client.js';
 import AuthManager from '../auth/index.js';
 import classifySkill, { SkillClassification } from './classifier.js';
-import generateSkillMd from './skill-md.js';
-import generateSkillJson, { SkillJsonData } from './skill-json.js';
+import generateSkillMd, { generateSkillMdFromTemplate } from './skill-md.js';
+import generateSkillJson, { generateSkillJsonFromTemplate, SkillJsonData } from './skill-json.js';
 import generateScript, { generateToolsHelper } from './scripts.js';
 import generateReferences from './references.js';
 import validateSkill from './validator.js';
@@ -29,6 +30,7 @@ export interface GenerationResult {
   skillPath: string;
   skillName: string;
   isPro: boolean;
+  templateMode: boolean;
   validation: {
     valid: boolean;
     errors: string[];
@@ -140,6 +142,16 @@ export class SkillGenerator {
       : join(process.cwd(), output);
     
     const skillName = classification.name;
+    
+    // Check if we're in template mode
+    const templateMode = this.aiClient.isTemplateMode();
+    
+    if (templateMode) {
+      console.log('  📝 Template mode: No API key detected.');
+      console.log('     Generating skill scaffold from description...');
+      console.log('     For AI-powered generation, set one of:');
+      console.log('     ZAI_API_KEY, OPENAI_API_KEY, OPENROUTER_API_KEY, QWEN_API_KEY');
+    }
 
     try {
       // Create directory
@@ -149,21 +161,36 @@ export class SkillGenerator {
 
       // Generate SKILL.md
       console.log('  📝 Generating SKILL.md...');
-      const skillMdContent = await generateSkillMd({
-        description,
-        skillType: classification.type,
-        aiClient: this.aiClient,
-      });
+      let skillMdContent: string;
+      
+      if (templateMode) {
+        skillMdContent = generateSkillMdFromTemplate({
+          description,
+          classification,
+        });
+      } else {
+        skillMdContent = await generateSkillMd({
+          description,
+          skillType: classification.type,
+          aiClient: this.aiClient,
+        });
+      }
       writeFileSync(join(skillPath, 'SKILL.md'), skillMdContent, 'utf-8');
       files.push('SKILL.md');
 
       // Generate skill.json
       console.log('  📋 Generating skill.json...');
-      const skillJsonData = await generateSkillJson({
-        description,
-        classification,
-        aiClient: this.aiClient,
-      });
+      let skillJsonData: SkillJsonData;
+      
+      if (templateMode) {
+        skillJsonData = generateSkillJsonFromTemplate(classification, description);
+      } else {
+        skillJsonData = await generateSkillJson({
+          description,
+          classification,
+          aiClient: this.aiClient,
+        });
+      }
       writeFileSync(
         join(skillPath, 'skill.json'),
         JSON.stringify(skillJsonData, null, 2),
@@ -171,8 +198,8 @@ export class SkillGenerator {
       );
       files.push('skill.json');
 
-      // Pro features
-      if (effectiveIsPro) {
+      // Pro features (only with real AI, not template mode)
+      if (effectiveIsPro && !templateMode) {
         console.log('  🚀 Pro: Generating scripts...');
         
         // Create scripts directory
@@ -235,6 +262,7 @@ export class SkillGenerator {
         skillPath,
         skillName,
         isPro: effectiveIsPro,
+        templateMode,
         validation,
         files,
         published,
@@ -246,6 +274,7 @@ export class SkillGenerator {
         skillPath,
         skillName: classification.name,
         isPro: effectiveIsPro,
+        templateMode,
         validation: { valid: false, errors: [], warnings: [] },
         files: [],
         published: false,
