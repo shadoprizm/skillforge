@@ -5,6 +5,7 @@
 
 import { mkdirSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { execSync } from 'child_process';
 import AIClient from '../ai/client.js';
 import AuthManager from '../auth/index.js';
 import classifySkill, { SkillClassification } from './classifier.js';
@@ -34,6 +35,7 @@ export interface GenerationResult {
     warnings: string[];
   };
   files: string[];
+  published?: boolean;
   error?: string;
 }
 
@@ -44,6 +46,56 @@ export class SkillGenerator {
   constructor() {
     this.aiClient = new AIClient();
     this.authManager = new AuthManager();
+  }
+
+  /**
+   * Publish a generated skill to ClawHub
+   */
+  private async publishToClawHub(skillPath: string, skillName: string): Promise<boolean> {
+    console.log('  🚀 Publishing to ClawHub...');
+
+    // Check if clawhub is installed
+    try {
+      execSync('which clawhub', { stdio: 'pipe' });
+    } catch {
+      console.error('  ❌ ClawHub CLI is not installed.');
+      console.error('     Install it with: npm install -g clawhub');
+      console.error('     Then run: skillforge login');
+      return false;
+    }
+
+    // Check if authenticated
+    try {
+      execSync('clawhub whoami', { stdio: 'pipe', encoding: 'utf-8' });
+    } catch {
+      console.error('  ❌ Not authenticated with ClawHub.');
+      console.error('     Run `skillforge login` to authenticate, then try again.');
+      return false;
+    }
+
+    // Generate slug from skill name
+    const slug = skillName
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    try {
+      const output = execSync(
+        `clawhub publish "${skillPath}" --slug "${slug}" --name "${skillName}" --version "1.0.0" --tags "latest"`,
+        { encoding: 'utf-8' }
+      );
+      console.log(`  ✅ Published to https://clawhub.ai/skills/${slug}`);
+      if (output) console.log(output);
+      return true;
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      // Extract message from exec error if possible
+      const stderr = (error as any)?.stderr || '';
+      console.error(`  ❌ Failed to publish: ${stderr || msg}`);
+      return false;
+    }
   }
 
   /**
@@ -170,13 +222,22 @@ export class SkillGenerator {
       console.log('  ✅ Validating...');
       const validation = validateSkill(skillPath);
 
+      const success = validation.valid && !validation.errors.length;
+
+      // Publish to ClawHub if requested
+      let published = false;
+      if (success && options.publish) {
+        published = await this.publishToClawHub(skillPath, skillName);
+      }
+
       return {
-        success: validation.valid && !validation.errors.length,
+        success,
         skillPath,
         skillName,
         isPro: effectiveIsPro,
         validation,
         files,
+        published,
       };
 
     } catch (error) {
@@ -187,6 +248,7 @@ export class SkillGenerator {
         isPro: effectiveIsPro,
         validation: { valid: false, errors: [], warnings: [] },
         files: [],
+        published: false,
         error: error instanceof Error ? error.message : String(error),
       };
     }

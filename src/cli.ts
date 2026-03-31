@@ -4,6 +4,7 @@
  */
 
 import { Command } from 'commander';
+import { execSync } from 'child_process';
 import { SkillGenerator } from './generator/index.js';
 import AuthManager from './auth/index.js';
 
@@ -33,8 +34,8 @@ program
 
     const authManager = new AuthManager();
     
-    // Check API key
-    if (options.pro || options.publish) {
+    // Check API key for Pro features only (--publish is free tier)
+    if (options.pro) {
       const key = options.apiKey || authManager.getApiKey();
       if (!key || !authManager.isProKey(key)) {
         console.error('❌ Pro features require a valid API key');
@@ -76,6 +77,10 @@ program
       for (const warning of result.validation.warnings) {
         console.log(`      • ${warning}`);
       }
+    }
+
+    if (result.published) {
+      console.log('\n   🚀 Published to ClawHub!');
     }
 
     if (!result.validation.valid) {
@@ -139,6 +144,20 @@ program
     const authManager = new AuthManager();
     authManager.setDefaultOutput(path);
     console.log(`✅ Default output set to ${path}`);
+  });
+
+// Login command — open ClawHub login flow
+program
+  .command('login')
+  .description('Authenticate with ClawHub to enable --publish')
+  .action(() => {
+    try {
+      execSync('clawhub login', { stdio: 'inherit' });
+    } catch {
+      console.error('❌ ClawHub login failed or ClawHub CLI is not installed.');
+      console.error('   Install: npm install -g clawhub');
+      process.exit(1);
+    }
   });
 
 program.parse();
